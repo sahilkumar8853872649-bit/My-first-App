@@ -1,112 +1,46 @@
-name: Build Android APK
+Role: You are an expert Flutter & Android developer.
+Task: Build a complete, production-ready Android App (.apk) for "Priyanshu Medical Store".
 
-on:
-  workflow_dispatch:
-  push:
-    branches: [main]
+### Store & Branding Details:
+- App Name: Priyanshu Medical Store
+- Pharmacist / Owner: Drx. Sahil
+- Helpline / Order Number: +91 8853872649 (Call & WhatsApp)
+- Operational Hours: 24x7 Open (Day & Night Service)
+- Key Service: Fast Home Delivery Available
 
-permissions:
-  contents: read
+### UI & Theme:
+- Color Palette: Trustworthy Medical Green (#00A86B) & Clean White / Light Cyan.
+- Top Header / Banner: "Priyanshu Medical Store" with a "24x7 Open & Home Delivery" badge.
+- Sub-text on Home: "Managed by Drx. Sahil | Call: 8853872649".
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+### Core App Screens & Features:
 
-    steps:
-      - uses: actions/checkout@v4
+1. **Home Screen (Quick Actions):**
+   - 📸 **"Upload Prescription (Parcha Bhejein)" Button:** Camera ya Gallery se photo select karein. Upload hone par customer ka name, address aur prescription seedhe WhatsApp (+91 8853872649) par ya backend database me order ban kar submit ho jaye.
+   - 📞 **Floating 24x7 Emergency Buttons:** 
+     - Direct Call Button -> dials 8853872649.
+     - Direct WhatsApp Button -> opens WhatsApp chat with pre-filled message: "Hello Drx. Sahil, mujhe Priyanshu Medical Store se dawa chahiye."
 
-      - uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 17
+2. **Order for Home Delivery Screen:**
+   - Simple form: Name, Full Delivery Address, Phone Number, Medicine List (text me) ya Prescription photo.
+   - Delivery badge: "24x7 Instant Delivery Available".
+   - Payment option: Cash on Delivery (COD) / UPI on Delivery.
 
-      - uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: 8.9
+3. **Products & Categories Screen:**
+   - Baby Care, Pain Relief, First Aid, OTC Medicines, Health Supplements.
+   - Search bar with instant filter.
 
-      - name: Create Android project
-        run: |
-          mkdir -p app/src/main/java/com/example/myfirstapp
+4. **Pharmacist Trust Badge / About Us:**
+   - "Under Supervision of Drx. Sahil"
+   - 24x7 Emergency Medical Support promise.
 
-          cat > settings.gradle <<'EOF'
-          pluginManagement {
-              repositories {
-                  google()
-                  mavenCentral()
-                  gradlePluginPortal()
-              }
-          }
-          dependencyResolutionManagement {
-              repositories {
-                  google()
-                  mavenCentral()
-              }
-          }
-          rootProject.name = 'MyFirstApp'
-          include ':app'
-          EOF
+### Technical Stack:
+- Framework: Flutter (Dart)
+- State Management: Provider
+- Features: Image Picker (for Prescription), URL Launcher (for direct WhatsApp & Phone call to 8853872649).
 
-          echo "plugins { id 'com.android.application' version '8.7.3' apply false }" > build.gradle
-
-          cat > app/build.gradle <<'EOF'
-          plugins {
-              id 'com.android.application'
-          }
-          android {
-              namespace 'com.example.myfirstapp'
-              compileSdk 35
-              defaultConfig {
-                  applicationId 'com.example.myfirstapp'
-                  minSdk 23
-                  targetSdk 35
-                  versionCode 1
-                  versionName '1.0'
-              }
-          }
-          EOF
-
-          cat > app/src/main/AndroidManifest.xml <<'EOF'
-          <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-              <application
-                  android:theme="@android:style/Theme.Material.Light.NoActionBar"
-                  android:label="My First App">
-                  <activity
-                      android:name=".MainActivity"
-                      android:exported="true">
-                      <intent-filter>
-                          <action android:name="android.intent.action.MAIN"/>
-                          <category android:name="android.intent.category.LAUNCHER"/>
-                      </intent-filter>
-                  </activity>
-              </application>
-          </manifest>
-          EOF
-
-          cat > app/src/main/java/com/example/myfirstapp/MainActivity.java <<'EOF'
-          package com.example.myfirstapp;
-
-          import android.app.Activity;
-          import android.os.Bundle;
-          import android.widget.TextView;
-
-          public class MainActivity extends Activity {
-              @Override
-              public void onCreate(Bundle savedInstanceState) {
-                  super.onCreate(savedInstanceState);
-                  TextView text = new TextView(this);
-                  text.setText("My First Android App!");
-                  text.setTextSize(28);
-                  text.setPadding(30, 100, 30, 30);
-                  setContentView(text);
-              }
-          }
-          EOF
-
-      - name: Build APK
-        run: gradle assembleDebug
-
-      - name: Save APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: My-First-App
-          path: app/build/outputs/apk/debug/app-debug.apk
+### Output Needed:
+1. Complete `pubspec.yaml` with required dependencies (image_picker, url_launcher, etc.).
+2. Clean `main.dart` and modular screen files.
+3. Android Manifest configurations for camera and call permissions.
+4. Exact terminal command to export the final release `.apk`.
